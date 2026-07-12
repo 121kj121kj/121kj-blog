@@ -3,116 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Codex 简体中文汉化 - 121KJ</title>
+<title>121KJ - 个人创作空间</title>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #0f0f13;
-    --card: #1a1a23;
-    --border: #2a2a3a;
+    --bg: #0a0a0f;
+    --card: #14141f;
+    --border: #1e1e30;
     --text: #e4e4ec;
-    --text2: #8888a0;
+    --text2: #787890;
     --accent: #6366f1;
     --green: #22c55e;
+    --orange: #f59e0b;
+    --pink: #ec4899;
   }
+  html { scroll-behavior: smooth; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-  header { padding: 48px 0 32px; text-align: center; }
-  header h1 { font-size: 2.4rem; font-weight: 700; background: linear-gradient(135deg, #818cf8, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  header p { color: var(--text2); font-size: 1.1rem; margin-top: 8px; }
-  .badge { display: inline-flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
-  .badge span { padding: 4px 14px; border-radius: 20px; font-size: .85rem; font-weight: 500; background: var(--card); border: 1px solid var(--border); color: var(--text2); }
-  .badge .green { color: var(--green); border-color: var(--green); }
-  .badge .acc { color: var(--accent); border-color: var(--accent); }
-  section { margin: 40px 0; }
-  section h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 16px; color: var(--text); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-  .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
-  .card p { font-size: .9rem; color: var(--text2); }
-  .num { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
-  .num.g { color: var(--green); }
-  .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
-  .module { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
-  .module .name { font-size: .88rem; }
-  .module .n { color: var(--green); font-weight: 600; font-size: .85rem; }
-  .step { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 8px; display: flex; gap: 14px; align-items: flex-start; }
-  .step .s { background: var(--accent); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 600; flex-shrink: 0; }
-  .step .content { font-size: .92rem; }
-  .step .content code { background: #2a2a3a; padding: 2px 8px; border-radius: 4px; font-size: .85rem; color: #a5b4fc; }
-  .footer { text-align: center; padding: 40px 0; color: var(--text2); font-size: .85rem; border-top: 1px solid var(--border); margin-top: 40px; }
-  .footer a { color: var(--accent); text-decoration: none; }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,15,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  nav .inner { max-width: 1024px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 24px; height: 52px; overflow-x: auto; }
+  nav a { color: var(--text2); text-decoration: none; font-size: .88rem; white-space: nowrap; transition: color .15s; }
+  nav a:hover { color: var(--accent); }
+  nav .logo { color: var(--text); font-weight: 700; font-size: 1rem; margin-right: auto; }
+
+  .container { max-width: 1024px; margin: 0 auto; padding: 0 24px; }
+
+  .hero { text-align: center; padding: 60px 0 48px; }
+  .hero h1 { font-size: 2.6rem; font-weight: 800; background: linear-gradient(135deg, #818cf8, #22c55e, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { color: var(--text2); font-size: 1.1rem; margin-top: 10px; max-width: 560px; margin-left: auto; margin-right: auto; }
+
+  section { padding: 48px 0; }
+  section h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  section .sub { color: var(--text2); font-size: .92rem; margin-bottom: 24px; }
+
+  .grid { display: grid; gap: 14px; }
+  .cols-2 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .cols-4 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color .2s, transform .2s; cursor: default; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card .icon { font-size: 2rem; margin-bottom: 10px; }
+  .card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: .88rem; color: var(--text2); }
+  .card .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: .78rem; margin-top: 10px; background: var(--accent); color: #fff; }
+  .card .tag.green { background: var(--green); }
+  .card .tag.orange { background: var(--orange); }
+  .card .tag.pink { background: var(--pink); }
+  .card .meta { font-size: .8rem; color: var(--text2); margin-top: 10px; }
+
+  .featured { background: linear-gradient(135deg, rgba(99,102,241,.08), rgba(34,197,94,.08)); border: 1px solid var(--accent); border-radius: 12px; padding: 32px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .featured .info { flex: 1; min-width: 200px; }
+  .featured .info h3 { font-size: 1.2rem; font-weight: 700; }
+  .featured .info p { color: var(--text2); font-size: .92rem; margin-top: 6px; }
+  .featured .info .badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: .8rem; margin-top: 10px; border: 1px solid var(--green); color: var(--green); }
+
+  footer { text-align: center; padding: 40px 0; color: var(--text2); font-size: .85rem; border-top: 1px solid var(--border); margin-top: 20px; }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.8rem; }
+    .hero { padding: 40px 0 32px; }
+    section { padding: 32px 0; }
+    nav .inner { gap: 14px; }
+    .featured { flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
 <body>
+
+<nav>
+  <div class="inner">
+    <span class="logo">121KJ</span>
+    <a href="#novel">小说</a>
+    <a href="#game">游戏</a>
+    <a href="#software">软件</a>
+    <a href="#tech">访谈</a>
+    <a href="#news">资讯</a>
+  </div>
+</nav>
+
 <div class="container">
-<header>
-  <h1>Codex 简体中文汉化</h1>
-  <p>Codex++ 中文语言包 — 内置本地化资源，让 Codex 完整支持中文界面与对话</p>
-  <div class="badge">
-    <span class="green">✅ 100% 翻译完成</span>
-    <span class="acc">v1.1.0</span>
-    <span>433 条字符串</span>
-    <span>22 个模块</span>
-  </div>
-</header>
-<section>
-  <h2>翻译概况</h2>
-  <div class="stats">
-    <div class="card"><div class="num g">433</div><p>已翻译字符串</p></div>
-    <div class="card"><div class="num g">100%</div><p>翻译覆盖率</p></div>
-    <div class="card"><div class="num">22</div><p>本地化模块</p></div>
-    <div class="card"><div class="num">1.1.0</div><p>当前版本</p></div>
-  </div>
-</section>
-<section>
-  <h2>功能特点</h2>
-  <div class="grid">
-    <div class="card"><h3>界面汉化</h3><p>完整汉化 Codex 主菜单、对话界面、编辑器、设置面板等全部界面</p></div>
-    <div class="card"><h3>中文对话</h3><p>Codex 以中文回复问题，使用符合中文习惯的自然表达</p></div>
-    <div class="card"><h3>技术术语</h3><p>编程术语使用中文表述：变量、函数、类、接口、数组等</p></div>
-    <div class="card"><h3>内置资源包</h3><p>插件附带完整本地化资源，即装即用，无需额外配置</p></div>
-  </div>
-</section>
-<section>
-  <h2>本地化覆盖模块</h2>
-  <div class="module-grid">
-    <div class="module"><span class="name">主菜单</span><span class="n">40</span></div>
-    <div class="module"><span class="name">对话界面</span><span class="n">20</span></div>
-    <div class="module"><span class="name">编辑器</span><span class="n">11</span></div>
-    <div class="module"><span class="name">对话列表</span><span class="n">16</span></div>
-    <div class="module"><span class="name">工作区</span><span class="n">22</span></div>
-    <div class="module"><span class="name">设置</span><span class="n">32</span></div>
-    <div class="module"><span class="name">对话框</span><span class="n">30</span></div>
-    <div class="module"><span class="name">状态提示</span><span class="n">24</span></div>
-    <div class="module"><span class="name">终端</span><span class="n">10</span></div>
-    <div class="module"><span class="name">插件管理</span><span class="n">17</span></div>
-    <div class="module"><span class="name">快捷键</span><span class="n">26</span></div>
-    <div class="module"><span class="name">错误信息</span><span class="n">18</span></div>
-    <div class="module"><span class="name">代理模式</span><span class="n">19</span></div>
-    <div class="module"><span class="name">新手引导</span><span class="n">14</span></div>
-    <div class="module"><span class="name">右键菜单</span><span class="n">15</span></div>
-    <div class="module"><span class="name">搜索</span><span class="n">11</span></div>
-    <div class="module"><span class="name">通知</span><span class="n">8</span></div>
-    <div class="module"><span class="name">技能管理</span><span class="n">9</span></div>
-    <div class="module"><span class="name">图片生成</span><span class="n">11</span></div>
-    <div class="module"><span class="name">浏览器</span><span class="n">9</span></div>
-    <div class="module"><span class="name">面板</span><span class="n">8</span></div>
-    <div class="module"><span class="name">更新管理</span><span class="n">11</span></div>
-  </div>
-</section>
-<section>
-  <h2>安装指南</h2>
-  <div class="step"><div class="s">1</div><div class="content">在 Codex 中打开 <b>Settings → Plugins → Localizations</b></div></div>
-  <div class="step"><div class="s">2</div><div class="content">搜索 <code>codex-zh-cn</code> 并点击安装</div></div>
-  <div class="step"><div class="s">3</div><div class="content">安装完成后，在 Settings → Language 中选择 <b>简体中文</b></div></div>
-  <div class="step"><div class="s">4</div><div class="content">重启 Codex，界面即切换为中文</div></div>
-</section>
-<div class="footer">
-  <a href="https://github.com/121kj121kj">GitHub</a> · Codex 简体中文汉化插件 · 121KJ.cn
+
+<div class="hero">
+  <h1>121KJ 创作空间</h1>
+  <p>小说 · 游戏 · 软件 · 科技 — 一个喜欢折腾的创作者</p>
 </div>
+
+<section id="novel">
+  <h2>📖 个人小说</h2>
+  <p class="sub">架空世界 · 科幻 · 奇幻</p>
+  <div class="grid cols-2">
+    <div class="card">
+      <div class="icon">🌌</div>
+      <h3>作品标题</h3>
+      <p>小说简介文字待补充。这里是架空世界的科幻故事，正在创作中…</p>
+      <span class="tag">连载中</span>
+      <div class="meta">2026 · 科幻</div>
+    </div>
+    <div class="card">
+      <div class="icon">🐉</div>
+      <h3>作品标题</h3>
+      <p>小说简介文字待补充。这里是奇幻题材的作品，正在构思中…</p>
+      <span class="tag pink">即将发布</span>
+      <div class="meta">2026 · 奇幻</div>
+    </div>
+  </div>
+</section>
+
+<section id="game">
+  <h2>🎮 小游戏</h2>
+  <p class="sub">自己做的各种小游戏，欢迎试玩</p>
+  <div class="grid cols-3">
+    <div class="card">
+      <div class="icon">🧩</div>
+      <h3>游戏名称</h3>
+      <p>游戏简介待补充…</p>
+      <span class="tag green">HTML5</span>
+    </div>
+    <div class="card">
+      <div class="icon">🎯</div>
+      <h3>游戏名称</h3>
+      <p>游戏简介待补充…</p>
+      <span class="tag green">HTML5</span>
+    </div>
+    <div class="card">
+      <div class="icon">🕹️</div>
+      <h3>游戏名称</h3>
+      <p>游戏简介待补充…</p>
+      <span class="tag green">HTML5</span>
+    </div>
+  </div>
+</section>
+
+<section id="software">
+  <h2>💻 小软件</h2>
+  <p class="sub">自己开发的小工具、插件与脚本</p>
+  <div class="grid cols-2">
+    <div class="featured">
+      <div class="icon" style="font-size:2.6rem">🀄</div>
+      <div class="info">
+        <h3>Codex 简体中文汉化</h3>
+        <p>Codex++ 中文语言包 — 内置本地化资源，让 Codex 完整支持中文界面与对话。22 个模块、433 条字符串，100% 翻译完成。</p>
+        <span class="badge">v1.1.0 · 100% 翻译</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon">🔧</div>
+      <h3>小工具名称</h3>
+      <p>工具简介待补充…</p>
+      <span class="tag orange">开发中</span>
+    </div>
+  </div>
+</section>
+
+<section id="tech">
+  <h2>🎙️ 科技访谈</h2>
+  <p class="sub">与科技从业者的对话记录</p>
+  <div class="grid cols-2">
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>访谈标题</h3>
+      <p>访谈简介待补充…</p>
+      <div class="meta">2026 · AI</div>
+    </div>
+    <div class="card">
+      <div class="icon">💡</div>
+      <h3>访谈标题</h3>
+      <p>访谈简介待补充…</p>
+      <div class="meta">2026 · 创业</div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <h2>📡 科技资讯</h2>
+  <p class="sub">精选科技资讯整理</p>
+  <div class="grid cols-2">
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>资讯标题</h3>
+      <p>内容摘要待补充…</p>
+      <div class="meta">2026-07-12</div>
+    </div>
+    <div class="card">
+      <div class="icon">🔬</div>
+      <h3>资讯标题</h3>
+      <p>内容摘要待补充…</p>
+      <div class="meta">2026-07-12</div>
+    </div>
+  </div>
+</section>
+
 </div>
+
+<footer>
+  <a href="https://github.com/121kj121kj">GitHub</a> · 121KJ.cn
+</footer>
+
 </body>
 </html>
