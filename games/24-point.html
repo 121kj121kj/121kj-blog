@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -22,6 +22,8 @@
   .red{background:#ef4444;color:#fff}
   .gray{background:#2a2a3a;color:#e4e4ec}
   .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .op-btn{padding:8px 16px;border-radius:8px;border:1px solid #2a2a3a;background:#1a1a23;color:#818cf8;font-size:1.1rem;font-weight:700;cursor:pointer;transition:border-color .15s;min-width:42px}
+  .op-btn:hover{border-color:#6366f1}
   .msg{padding:12px;border-radius:8px;margin-bottom:16px;font-size:.95rem;min-height:44px;display:flex;align-items:center;justify-content:center}
   .msg.ok{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
   .msg.err{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
@@ -34,11 +36,19 @@
 <body>
 <div class="game">
   <h1>🎲 24 点</h1>
-  <p class="sub">用四张牌通过 + - × ÷ 算出 24</p>
-  <div id="msg" class="msg info">输入算式，例如: (8+4)×(6÷3)</div>
+  <p class="sub">用四张牌通过 + − × ÷ 算出 24</p>
+  <div id="msg" class="msg info">点击数字/符号按钮输入算式</div>
   <div class="nums" id="cards"></div>
   <div class="input">
     <input type="text" id="expression" placeholder="输入算式..." autofocus>
+  </div>
+  <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:8px">
+    <button class="op-btn" onclick="insert('(')">(</button>
+    <button class="op-btn" onclick="insert(')')">)</button>
+    <button class="op-btn" onclick="insert('+')">+</button>
+    <button class="op-btn" onclick="insert('-')">−</button>
+    <button class="op-btn" onclick="insert('×')">×</button>
+    <button class="op-btn" onclick="insert('÷')">÷</button>
   </div>
   <div class="btns">
     <button class="btn primary" onclick="check()">验证</button>
@@ -50,43 +60,60 @@
 </div>
 <script>
 let cards=[],solutions=[];
+
+function insert(s){
+  const inp=document.getElementById('expression');
+  const pos=inp.selectionStart;
+  const val=inp.value;
+  inp.value=val.slice(0,pos)+s+val.slice(pos);
+  inp.focus();
+  inp.selectionStart=inp.selectionEnd=pos+s.length;
+}
+
 function rand(n,m){return Math.floor(Math.random()*(m-n+1))+n}
+
 function newGame(){
   cards=[rand(1,13),rand(1,13),rand(1,13),rand(1,13)];
   document.getElementById('cards').innerHTML=cards.map(n=>'<div class="n">'+(n===1?'A':n===11?'J':n===12?'Q':n===13?'K':n)+'</div>').join('');
   document.getElementById('expression').value='';
   document.getElementById('hintArea').textContent='';
-  setMsg('info','输入算式，例如: (8+4)×(6÷3)');
+  setMsg('info','点击符号按钮或键盘输入算式');
   solutions=calc24(cards);
 }
+
 function setMsg(t,m){const e=document.getElementById('msg');e.className='msg '+t;e.textContent=m}
+
 function check(){
   const exp=document.getElementById('expression').value.trim();
   if(!exp){setMsg('err','请输入算式');return}
   try{
     const used=extractNums(exp);
     if(used.length!==4||!matchCards(used)){setMsg('err','必须使用全部四张牌，每张只用一次');return}
-    const r=eval(exp.replace(/×/g,'*').replace(/÷/g,'/'));
-    if(Math.abs(r-24)<0.001){setMsg('ok','✅ 正确！太棒了！');newGame()}else{setMsg('err','❌ 结果是 '+r+'，不是 24')}
+    const r=eval(exp.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-'));
+    if(Math.abs(r-24)<0.001){setMsg('ok','✅ 正确！太棒了！');setTimeout(newGame,1500)}else{setMsg('err','❌ 结果是 '+r+'，不是 24')}
   }catch(e){setMsg('err','算式格式有误，请检查')}
 }
+
 function extractNums(s){return(s.match(/\d+/g)||[]).map(Number).filter(n=>n>0)}
+
 function matchCards(used){const c=[...cards];return used.every(n=>{const i=c.indexOf(n);if(i<0)return false;c.splice(i,1);return true})}
+
 function showHint(){
   if(solutions.length===0){document.getElementById('hintArea').textContent='这道题无解 😅 换一题吧';return}
   document.getElementById('hintArea').textContent='💡 提示: '+solutions[rand(0,solutions.length-1)];
 }
+
 function calc24(nums){
   const ops=['+','-','×','÷'];const res=[];
   function calc(a,o,b){return o==='+'?a+b:o==='-'?a-b:o==='×'?a*b:o==='÷'?(b===0?NaN:a/b):NaN}
   function perm(arr){if(arr.length<=1)return[arr];const r=[];for(let i=0;i<arr.length;i++){const rest=[...arr.slice(0,i),...arr.slice(i+1)];for(const p of perm(rest))r.push([arr[i],...p])}return r}
   function expr(a,b,c,d,o1,o2,o3,p){
-    const p2=m=>{if(m===0)return calc(calc(a,o1,b),o2,calc(c,o3,d));if(m===1){const t=calc(a,o1,b);return calc(calc(t,o2,c),o3,d)}if(m===2){const t=calc(b,o2,c);return calc(calc(a,o1,t),o3,d)}if(m===3){const t=calc(c,o3,d);return calc(calc(a,o1,b),o2,t)}if(m===4){const t=calc(calc(b,o2,c),o3,d);return calc(a,o1,t)}return calc(a,o1,calc(calc(b,o2,c),o3,d))};
+    const p2=m=>{if(m===0)return calc(calc(a,o1,b),o2,calc(c,o3,d));if(m===1)return calc(calc(calc(a,o1,b),o2,c),o3,d);if(m===2)return calc(calc(a,o1,calc(b,o2,c)),o3,d);if(m===3)return calc(calc(a,o1,b),o2,calc(c,o3,d));if(m===4)return calc(a,o1,calc(calc(b,o2,c),o3,d));return calc(a,o1,calc(b,o2,calc(c,o3,d)))};
     const v=p2(p);if(isNaN(v)||v===Infinity)return null;
     const fm=m=>{if(m===0)return`(${a} ${o1} ${b}) ${o2} (${c} ${o3} ${d})`;if(m===1)return`((${a} ${o1} ${b}) ${o2} ${c}) ${o3} ${d}`;if(m===2)return`(${a} ${o1} (${b} ${o2} ${c})) ${o3} ${d}`;if(m===3)return`(${a} ${o1} ${b}) ${o2} (${c} ${o3} ${d})`;if(m===4)return`${a} ${o1} ((${b} ${o2} ${c}) ${o3} ${d})`;return`${a} ${o1} (${b} ${o2} (${c} ${o3} ${d}))`};
     return Math.abs(v-24)<0.001?fm(p):null;
   }
-  for(const [a,b,c,d] of perm(nums))
+  for(const[a,b,c,d] of perm(nums))
     for(let i=0;i<4;i++)for(let j=0;j<4;j++)for(let k=0;k<4;k++)
       for(let p=0;p<6;p++){const r=expr(a,b,c,d,ops[i],ops[j],ops[k],p);if(r&&!res.includes(r))res.push(r)}
   return res;
