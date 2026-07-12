@@ -1,386 +1,118 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Codex 汉化参考</title>
+<title>Codex 简体中文汉化 - 121KJ</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #f5f5f5;
-    --card: #fff;
-    --border: #e0e0e0;
-    --text: #1a1a1a;
-    --text-secondary: #666;
-    --accent: #2563eb;
-    --accent-light: #eff6ff;
-    --zh-color: #dc2626;
-    --cat-color: #1d4ed8;
-    --search-bg: #fff;
+    --bg: #0f0f13;
+    --card: #1a1a23;
+    --border: #2a2a3a;
+    --text: #e4e4ec;
+    --text2: #8888a0;
+    --accent: #6366f1;
+    --green: #22c55e;
   }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-  }
-  /* ── 顶部栏 ── */
-  .header {
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
-  }
-  .header h1 {
-    font-size: 16px;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .header .subtitle {
-    font-size: 12px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-  .search-wrap {
-    flex: 1;
-    position: relative;
-    max-width: 360px;
-  }
-  .search-wrap input {
-    width: 100%;
-    padding: 7px 12px 7px 32px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-    background: var(--search-bg);
-    transition: border-color 0.15s;
-  }
-  .search-wrap input:focus { border-color: var(--accent); }
-  .search-wrap .icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    font-size: 14px;
-    pointer-events: none;
-  }
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-  .count-badge {
-    font-size: 12px;
-    color: var(--text-secondary);
-    background: var(--bg);
-    padding: 3px 10px;
-    border-radius: 12px;
-    white-space: nowrap;
-  }
-  .top-toggle {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: background 0.15s;
-  }
-  .top-toggle:hover { background: var(--bg); }
-  .top-toggle input { accent-color: var(--accent); }
-  .copy-btn {
-    font-size: 12px;
-    color: var(--accent);
-    background: none;
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    padding: 3px 10px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .copy-btn:hover { background: var(--accent-light); }
-  /* ── 内容区 ── */
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 20px 24px;
-  }
-  .category { margin-bottom: 20px; }
-  .category-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--cat-color);
-    margin-bottom: 6px;
-    padding: 0 8px;
-  }
-  .items {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .item {
-    display: flex;
-    align-items: center;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .item:hover { background: var(--accent-light); }
-  .item .en {
-    color: var(--text);
-    font-weight: 500;
-    min-width: 140px;
-  }
-  .item .arrow {
-    color: #bbb;
-    margin: 0 10px;
-    flex-shrink: 0;
-  }
-  .item .zh {
-    color: var(--zh-color);
-    font-weight: 500;
-  }
-  .item .copy-hint {
-    margin-left: auto;
-    font-size: 11px;
-    color: #bbb;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .item:hover .copy-hint { opacity: 1; }
-  /* ── 空状态 ── */
-  .empty {
-    text-align: center;
-    color: #999;
-    padding: 60px 20px;
-    font-size: 14px;
-  }
-  .empty .big { font-size: 36px; display: block; margin-bottom: 8px; }
-  /* ── Toast ── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: #1a1a1a;
-    color: #fff;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-size: 13px;
-    opacity: 0;
-    transition: all 0.25s;
-    pointer-events: none;
-    z-index: 999;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 48px 0 32px; text-align: center; }
+  header h1 { font-size: 2.4rem; font-weight: 700; background: linear-gradient(135deg, #818cf8, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  header p { color: var(--text2); font-size: 1.1rem; margin-top: 8px; }
+  .badge { display: inline-flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
+  .badge span { padding: 4px 14px; border-radius: 20px; font-size: .85rem; font-weight: 500; background: var(--card); border: 1px solid var(--border); color: var(--text2); }
+  .badge .green { color: var(--green); border-color: var(--green); }
+  .badge .acc { color: var(--accent); border-color: var(--accent); }
+  section { margin: 40px 0; }
+  section h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: .9rem; color: var(--text2); }
+  .num { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+  .num.g { color: var(--green); }
+  .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .module { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .module .name { font-size: .88rem; }
+  .module .n { color: var(--green); font-weight: 600; font-size: .85rem; }
+  .step { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 8px; display: flex; gap: 14px; align-items: flex-start; }
+  .step .s { background: var(--accent); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 600; flex-shrink: 0; }
+  .step .content { font-size: .92rem; }
+  .step .content code { background: #2a2a3a; padding: 2px 8px; border-radius: 4px; font-size: .85rem; color: #a5b4fc; }
+  .footer { text-align: center; padding: 40px 0; color: var(--text2); font-size: .85rem; border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer a { color: var(--accent); text-decoration: none; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 600px) { header h1 { font-size: 1.6rem; } .stats { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>🀄️ Codex 汉化参考</h1>
-  <span class="subtitle">中英对照 · 点击即复制</span>
-  <div class="search-wrap">
-    <span class="icon">🔍</span>
-    <input id="search" type="text" placeholder="搜索英文或中文…" autofocus>
+<div class="container">
+<header>
+  <h1>Codex 简体中文汉化</h1>
+  <p>Codex++ 中文语言包 — 内置本地化资源，让 Codex 完整支持中文界面与对话</p>
+  <div class="badge">
+    <span class="green">✅ 100% 翻译完成</span>
+    <span class="acc">v1.1.0</span>
+    <span>433 条字符串</span>
+    <span>22 个模块</span>
   </div>
-  <div class="header-actions">
-    <span class="count-badge" id="count">共 0 条</span>
-    <label class="top-toggle">
-      <input type="checkbox" id="topCheck" checked> 置顶
-    </label>
-    <button class="copy-btn" onclick="copyAllVisible()">复制全部</button>
+</header>
+<section>
+  <h2>翻译概况</h2>
+  <div class="stats">
+    <div class="card"><div class="num g">433</div><p>已翻译字符串</p></div>
+    <div class="card"><div class="num g">100%</div><p>翻译覆盖率</p></div>
+    <div class="card"><div class="num">22</div><p>本地化模块</p></div>
+    <div class="card"><div class="num">1.1.0</div><p>当前版本</p></div>
   </div>
+</section>
+<section>
+  <h2>功能特点</h2>
+  <div class="grid">
+    <div class="card"><h3>界面汉化</h3><p>完整汉化 Codex 主菜单、对话界面、编辑器、设置面板等全部界面</p></div>
+    <div class="card"><h3>中文对话</h3><p>Codex 以中文回复问题，使用符合中文习惯的自然表达</p></div>
+    <div class="card"><h3>技术术语</h3><p>编程术语使用中文表述：变量、函数、类、接口、数组等</p></div>
+    <div class="card"><h3>内置资源包</h3><p>插件附带完整本地化资源，即装即用，无需额外配置</p></div>
+  </div>
+</section>
+<section>
+  <h2>本地化覆盖模块</h2>
+  <div class="module-grid">
+    <div class="module"><span class="name">主菜单</span><span class="n">40</span></div>
+    <div class="module"><span class="name">对话界面</span><span class="n">20</span></div>
+    <div class="module"><span class="name">编辑器</span><span class="n">11</span></div>
+    <div class="module"><span class="name">对话列表</span><span class="n">16</span></div>
+    <div class="module"><span class="name">工作区</span><span class="n">22</span></div>
+    <div class="module"><span class="name">设置</span><span class="n">32</span></div>
+    <div class="module"><span class="name">对话框</span><span class="n">30</span></div>
+    <div class="module"><span class="name">状态提示</span><span class="n">24</span></div>
+    <div class="module"><span class="name">终端</span><span class="n">10</span></div>
+    <div class="module"><span class="name">插件管理</span><span class="n">17</span></div>
+    <div class="module"><span class="name">快捷键</span><span class="n">26</span></div>
+    <div class="module"><span class="name">错误信息</span><span class="n">18</span></div>
+    <div class="module"><span class="name">代理模式</span><span class="n">19</span></div>
+    <div class="module"><span class="name">新手引导</span><span class="n">14</span></div>
+    <div class="module"><span class="name">右键菜单</span><span class="n">15</span></div>
+    <div class="module"><span class="name">搜索</span><span class="n">11</span></div>
+    <div class="module"><span class="name">通知</span><span class="n">8</span></div>
+    <div class="module"><span class="name">技能管理</span><span class="n">9</span></div>
+    <div class="module"><span class="name">图片生成</span><span class="n">11</span></div>
+    <div class="module"><span class="name">浏览器</span><span class="n">9</span></div>
+    <div class="module"><span class="name">面板</span><span class="n">8</span></div>
+    <div class="module"><span class="name">更新管理</span><span class="n">11</span></div>
+  </div>
+</section>
+<section>
+  <h2>安装指南</h2>
+  <div class="step"><div class="s">1</div><div class="content">在 Codex 中打开 <b>Settings → Plugins → Localizations</b></div></div>
+  <div class="step"><div class="s">2</div><div class="content">搜索 <code>codex-zh-cn</code> 并点击安装</div></div>
+  <div class="step"><div class="s">3</div><div class="content">安装完成后，在 Settings → Language 中选择 <b>简体中文</b></div></div>
+  <div class="step"><div class="s">4</div><div class="content">重启 Codex，界面即切换为中文</div></div>
+</section>
+<div class="footer">
+  <a href="https://github.com/121kj121kj">GitHub</a> · Codex 简体中文汉化插件 · 121KJ.cn
 </div>
-
-<div class="content" id="content"></div>
-<div class="toast" id="toast"></div>
-
-<script>
-// ── 翻译数据 ──
-const DATA = [
-  { cat: "主菜单", items: [
-    ["File", "文件"], ["Edit", "编辑"], ["View", "视图"], ["Help", "帮助"],
-    ["New Thread", "新建线程"], ["Close Tab", "关闭标签页"],
-    ["Close Window", "关闭窗口"], ["Exit", "退出"],
-  ]},
-  { cat: "编辑操作", items: [
-    ["Undo", "撤销"], ["Redo", "重做"], ["Cut", "剪切"],
-    ["Copy", "复制"], ["Paste", "粘贴"], ["Select All", "全选"],
-    ["Find", "查找"], ["Replace", "替换"],
-  ]},
-  { cat: "对话区", items: [
-    ["Thread", "线程 / 对话"], ["New Thread", "新建对话"],
-    ["Send", "发送"], ["Cancel", "取消"],
-    ["Stop Generating", "停止生成"], ["Continue", "继续"],
-    ["Retry", "重试"], ["Edit Message", "编辑消息"],
-    ["Delete Message", "删除消息"], ["Copy Message", "复制消息"],
-    ["Insert Code", "插入代码"],
-    ["Commentary", "备注 / 过程记录"], ["Final Answer", "最终回答"],
-  ]},
-  { cat: "工作区", items: [
-    ["Workspace", "工作区"], ["Files", "文件"],
-    ["Open File", "打开文件"], ["Save File", "保存文件"],
-    ["Search Files", "搜索文件"], ["Terminal", "终端"],
-    ["New Terminal", "新建终端"], ["Run Command", "运行命令"],
-  ]},
-  { cat: "设置与配置", items: [
-    ["Settings", "设置"], ["Preferences", "偏好设置"],
-    ["Keyboard Shortcuts", "键盘快捷键"], ["Account", "账户"],
-    ["API Configuration", "API 配置"], ["Theme", "主题"],
-    ["Light Mode", "浅色模式"], ["Dark Mode", "深色模式"],
-    ["Font Size", "字体大小"], ["Language", "语言"],
-    ["Proxy Settings", "代理设置"],
-  ]},
-  { cat: "工具与功能", items: [
-    ["Tools", "工具"], ["Skills", "技能"], ["Plugins", "插件"],
-    ["Goal", "目标"], ["Search", "搜索"], ["Browse", "浏览"],
-    ["Image Generation", "图片生成"], ["Code Analysis", "代码分析"],
-    ["Run Tests", "运行测试"],
-  ]},
-  { cat: "视图与导航", items: [
-    ["Sidebar", "侧边栏"], ["Panel", "面板"],
-    ["Split View", "分屏视图"], ["Zoom In", "放大"],
-    ["Zoom Out", "缩小"], ["Reset Zoom", "重置缩放"],
-    ["Full Screen", "全屏"], ["Minimize", "最小化"],
-    ["Maximize", "最大化"],
-  ]},
-  { cat: "对话框 / 弹窗", items: [
-    ["Confirm", "确认"], ["Cancel", "取消"], ["OK", "确定"],
-    ["Apply", "应用"], ["Save", "保存"], ["Discard", "放弃更改"],
-    ["Yes", "是"], ["No", "否"], ["Close", "关闭"],
-    ["Loading…", "加载中…"], ["Error", "错误"],
-    ["Warning", "警告"], ["Info", "提示信息"], ["Success", "成功"],
-  ]},
-  { cat: "状态与通知", items: [
-    ["Connected", "已连接"], ["Disconnected", "未连接"],
-    ["Running", "运行中"], ["Completed", "已完成"],
-    ["Failed", "失败"], ["Pending", "等待中"],
-    ["Idle", "空闲"], ["Processing…", "处理中…"],
-    ["Ready", "就绪"],
-  ]},
-  { cat: "快捷键", items: [
-    ["Ctrl+Enter", "发送消息"], ["Ctrl+Shift+Enter", "换行"],
-    ["Ctrl+C", "复制"], ["Ctrl+V", "粘贴"],
-    ["Ctrl+Z", "撤销"], ["Ctrl+Shift+Z / Ctrl+Y", "重做"],
-    ["Ctrl+S", "保存"], ["Ctrl+F", "查找"],
-    ["Ctrl+N", "新建对话"], ["Ctrl+W", "关闭标签页"],
-    ["Ctrl+Tab", "切换标签页"], ["Ctrl+`", "切换终端"],
-    ["Escape", "取消 / 关闭"],
-  ]},
-];
-
-// ── 渲染 ──
-const $ = s => document.querySelector(s);
-const content = $('#content');
-const searchInput = $('#search');
-const countEl = $('#count');
-
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
-function showToast(msg) {
-  const t = $('#toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 1500);
-}
-
-function render(kw) {
-  kw = (kw || '').trim().toLowerCase();
-  let total = 0, visible = 0;
-  let html = '';
-
-  for (const cat of DATA) {
-    const filtered = cat.items.filter(([en, zh]) => {
-      total++;
-      return !kw || en.toLowerCase().includes(kw) || zh.includes(kw);
-    });
-    if (!filtered.length) continue;
-    visible += filtered.length;
-
-    html += `<div class="category"><div class="category-title">${escapeHtml(cat.cat)}</div><div class="items">`;
-    for (const [en, zh] of filtered) {
-      const attr = `data-zh="${escapeHtml(zh)}"`;
-      html += `<div class="item" onclick="copyZh(this)" ${attr}>
-        <span class="en">${escapeHtml(en)}</span>
-        <span class="arrow">→</span>
-        <span class="zh">${escapeHtml(zh)}</span>
-        <span class="copy-hint">点击复制</span>
-      </div>`;
-    }
-    html += '</div></div>';
-  }
-
-  if (visible === 0) {
-    html = `<div class="empty"><span class="big">🔍</span>没有匹配结果，试试其他关键词</div>`;
-  }
-
-  content.innerHTML = html;
-  countEl.textContent = `共 ${total} 条，显示 ${visible} 条`;
-}
-
-window.copyZh = function(el) {
-  const zh = el.dataset.zh;
-  navigator.clipboard.writeText(zh).then(() => {
-    showToast(`✓ 已复制: ${zh}`);
-  }).catch(() => {
-    // fallback
-    const ta = document.createElement('textarea');
-    ta.value = zh;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast(`✓ 已复制: ${zh}`);
-  });
-};
-
-function copyAllVisible() {
-  const items = content.querySelectorAll('.item');
-  if (!items.length) return;
-  const texts = Array.from(items).map(el => el.dataset.zh);
-  const text = texts.join('\n');
-  navigator.clipboard.writeText(text).then(() => {
-    showToast(`✓ 已复制 ${texts.length} 条中文`);
-  });
-}
-
-// ── 搜索事件 ──
-searchInput.addEventListener('input', () => render(searchInput.value));
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-    e.preventDefault();
-    searchInput.focus();
-    searchInput.select();
-  }
-});
-// 记住置顶
-$('#topCheck').addEventListener('change', () => {
-  // 浏览器窗口本身不支持置顶，但保持 UI 反馈
-  localStorage.setItem('codex_zh_pin', $('#topCheck').checked);
-});
-$('#topCheck').checked = localStorage.getItem('codex_zh_pin') !== 'false';
-
-// ── 首次渲染 ──
-render('');
-</script>
+</div>
 </body>
 </html>
